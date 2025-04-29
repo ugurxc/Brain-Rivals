@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "156210365137",
+    "project_id": "brain-rivals",
+    "storage_bucket": "brain-rivals.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156210365137:android:441cd09242db64ec64fbf0",
+        "android_client_info": {
+          "package_name": "com.example.brain_rivals"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWPoy68AXhiUoKW0uxRkUlgjemu6oHnbk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

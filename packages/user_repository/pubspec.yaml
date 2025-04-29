@@ -1,0 +1,41 @@
+name: user_repository
+description: "A new Flutter project."
+publish_to: 'none'
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.2
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  equatable: ^2.0.7
+  firebase_auth: ^5.3.4
+  cloud_firestore: ^5.5.1
+  firebase_storage: ^12.3.7
+  firebase_core: ^3.8.1
+
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^4.0.0
+
+
+flutter:
+
+
+  uses-material-design: true
+
+
+  
+    
