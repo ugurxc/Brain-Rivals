@@ -1,17 +1,20 @@
 import 'package:brain_rivals/constant.dart';
-import 'package:brain_rivals/screens/category_detail_screen.dart';
+import 'package:brain_rivals/screens/offline_game/category_detail_screen.dart';
+import 'package:brain_rivals/screens/online_game/category_detail_screen_online.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:user_repository/user_repository.dart';
 
-class OfflineCategoryScreen extends StatefulWidget {
-  const OfflineCategoryScreen({super.key});
+class OnlineCategoryScreen extends StatefulWidget {
+  final MyUser? friend;
+  const OnlineCategoryScreen({super.key, this.friend});
 
   @override
-  State<OfflineCategoryScreen> createState() => _OfflineCategoryScreenState();
+  State<OnlineCategoryScreen> createState() => _OfflineCategoryScreenState();
 }
 
-class _OfflineCategoryScreenState extends State<OfflineCategoryScreen> {
+class _OfflineCategoryScreenState extends State<OnlineCategoryScreen> {
   Future<void> addQuestionToFirestore(
 
   
@@ -58,11 +61,11 @@ class _OfflineCategoryScreenState extends State<OfflineCategoryScreen> {
         centerTitle: true,
         title: const Text("kategoriler", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
-      body:  const SingleChildScrollView(
+      body:   SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             SingleChildScrollView(
@@ -72,32 +75,34 @@ class _OfflineCategoryScreenState extends State<OfflineCategoryScreen> {
                 children: [
                   Column(
                     children: [
-                      CategoryOffline(
+                      CategoryOnline(
                         iconData: FontAwesomeIcons.futbol,
                         categoryName: 'sport01',
                         text: "Spor",
                         imageUrl: "assets/images/sporKulubu.jpg",
+                        friend: widget.friend, 
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      CategoryOffline(
+                       CategoryOnline(
                         iconData: FontAwesomeIcons.earthAmericas,
                         categoryName: "geography01",
                         text: "Coğrafya",
                         imageUrl: "assets/images/cografya.jpg",
+                        friend: widget.friend,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Column(
+                  const Column(
                     children: [
-                      CategoryOffline(
+                      CategoryOnline(
                         iconData: FontAwesomeIcons.landmark,
                         categoryName: "history01",
                         text: "Tarih",
@@ -106,7 +111,7 @@ class _OfflineCategoryScreenState extends State<OfflineCategoryScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      CategoryOffline(
+                      CategoryOnline(
                         iconData: FontAwesomeIcons.palette,
                         categoryName: "art01",
                         text: "Sanat",
@@ -117,19 +122,19 @@ class _OfflineCategoryScreenState extends State<OfflineCategoryScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Column(
+                  const Column(
                     children: [
-                      CategoryOffline(
+                      CategoryOnline(
                         iconData: FontAwesomeIcons.vials,
                         categoryName: "science01",
                         text: "Bilim",
                         imageUrl: "assets/images/bilim.png",
                       ),
                       SizedBox(height: 10,),
-                      CategoryOffline(
+                      CategoryOnline(
                         iconData: FontAwesomeIcons.mixer,
                         categoryName: "mixed01",
                         text: "Karışık",
@@ -143,43 +148,43 @@ class _OfflineCategoryScreenState extends State<OfflineCategoryScreen> {
                 ],
               ),
             ),
-            Divider(color: kPrimaryLightColor,),
-            SizedBox(height: 20,),
-            Text("Dizi ve Animasyon" ,  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold , fontSize: 22),),
-            SizedBox(height: 10),
-            SingleChildScrollView(
+            const Divider(color: kPrimaryLightColor,),
+            const SizedBox(height: 20,),
+            const Text("Dizi ve Animasyon" ,  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold , fontSize: 22),),
+            const SizedBox(height: 10),
+            const SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  CategoryOffline(
+                  CategoryOnline(
                     iconData: FontAwesomeIcons.film,
                     categoryName: "gibi01",
                         text: "Gibi",
                         imageUrl: "assets/images/gibi.jpg",
                       ),
                       SizedBox(width: 10,),
-                      CategoryOffline(
+                      CategoryOnline(
                         iconData: FontAwesomeIcons.film,
                         categoryName: "prens01",
                         text: "Prens",
                         imageUrl: "assets/images/prens.jpg",
                       ),
                        SizedBox(width: 10,),
-                      CategoryOffline(
+                      CategoryOnline(
                         iconData: FontAwesomeIcons.film,
                         categoryName: "piece01",
                         text: "One-Piece",
                         imageUrl: "assets/images/onepiece.webp",
                       ),
                       SizedBox(width: 10,),
-                      CategoryOffline(
+                      CategoryOnline(
                         iconData: FontAwesomeIcons.film,
                         categoryName: "arcane01",
                         text: "Arcane",
                         imageUrl: "assets/images/arcane.webp",
                       ),
                        SizedBox(width: 10,),
-                        CategoryOffline(
+                        CategoryOnline(
                           iconData: FontAwesomeIcons.film,
                           categoryName: "bleach01",
                         text: "Bleach",
@@ -189,36 +194,36 @@ class _OfflineCategoryScreenState extends State<OfflineCategoryScreen> {
                 ],
               ),
             ), 
-            Divider(color: kPrimaryLightColor,),
-             SizedBox(height: 20,),
-            Text("Hayat" ,  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold , fontSize: 22),),
-            SizedBox(height: 10,),
-                        SingleChildScrollView(
+            const Divider(color: kPrimaryLightColor,),
+             const SizedBox(height: 20,),
+            const Text("Hayat" ,  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold , fontSize: 22),),
+            const SizedBox(height: 10,),
+                        const SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  CategoryOffline(
+                  CategoryOnline(
                     iconData: FontAwesomeIcons.utensils,
                     categoryName: "food01",
                         text: "Beslenme",
                         imageUrl: "assets/images/beslenme.jpg",
                       ),
                       SizedBox(width: 10,),
-                      CategoryOffline(  
+                      CategoryOnline(  
                         iconData: FontAwesomeIcons.brain,
                         categoryName: "philosophy01",
                         text: "Felsefe",
                         imageUrl: "assets/images/felsefe.jpg",
                       ),
                        SizedBox(width: 10,),
-                      CategoryOffline(
+                      CategoryOnline(
                         iconData: FontAwesomeIcons.personFalling,
                         categoryName: "culture01",
                         text: "Genel kültür",
                         imageUrl: "assets/images/genelkültür.jpeg",
                       ),
                       SizedBox(width: 10,),
-                      CategoryOffline(
+                      CategoryOnline(
                         iconData: FontAwesomeIcons.headSideCough,
                         categoryName: "communication01",
                         text: "İletişim",
@@ -230,29 +235,29 @@ class _OfflineCategoryScreenState extends State<OfflineCategoryScreen> {
               ),
             ), 
 
-            Divider(color: kPrimaryLightColor,),
-             SizedBox(height: 20,),
-            Text("Popüler" ,  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold , fontSize: 22),),
-            SizedBox(height: 10,),
-             SingleChildScrollView(
+            const Divider(color: kPrimaryLightColor,),
+             const SizedBox(height: 20,),
+            const Text("Popüler" ,  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold , fontSize: 22),),
+            const SizedBox(height: 10,),
+             const SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  CategoryOffline(
+                  CategoryOnline(
                     iconData: FontAwesomeIcons.music,
                     categoryName: "turkishRap01",
                         text: "Türkçe Rap",
                         imageUrl: "assets/images/rap.jpg",
                       ),
                       SizedBox(width: 10,),
-                      CategoryOffline( 
+                      CategoryOnline( 
                         iconData: FontAwesomeIcons.futbol,
                         categoryName: "galatasaray01", 
                         text: "Galatasaray",
                         imageUrl: "assets/images/gs.jpg",
                       ),
                        SizedBox(width: 10,),
-                      CategoryOffline(
+                      CategoryOnline(
                         iconData: FontAwesomeIcons.music,
                         categoryName: "pop01",
                         text: "90'lar pop",
@@ -264,7 +269,7 @@ class _OfflineCategoryScreenState extends State<OfflineCategoryScreen> {
                 ],
               ),
             ), 
-            SizedBox(height: 20,)
+            const SizedBox(height: 20,)
 
           ],
         ),
@@ -273,19 +278,20 @@ class _OfflineCategoryScreenState extends State<OfflineCategoryScreen> {
   }
 }
 
-class CategoryOffline extends StatelessWidget {
+class CategoryOnline extends StatelessWidget {
   final String text;
   final String imageUrl;
   final String categoryName;
   
   final  IconData iconData;
-  
-  const CategoryOffline({
+  final MyUser? friend;
+  const CategoryOnline({
     super.key,
     
     required this.text,
     required this.imageUrl,
-    required this.categoryName, required this.iconData,
+    required this.categoryName, required this.iconData, this.friend,
+    
   });
 
   @override
@@ -295,11 +301,12 @@ class CategoryOffline extends StatelessWidget {
 
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => DetailPage(
+            builder: (context) => DetailPageOnline(
               icon: iconData,
               text: text,
               imageUrl: imageUrl,
               categoryName:categoryName,
+              friend: friend,
 
             ),
           ),

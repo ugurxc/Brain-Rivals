@@ -15,6 +15,7 @@ class FirebaseUserRepository  implements UserRepository{
 
 	final FirebaseAuth _firebaseAuth;
 	final usersCollection = FirebaseFirestore.instance.collection('users');
+  final CollectionReference _challenges = FirebaseFirestore.instance.collection('challenges');
 
     final CollectionReference notifications =
       FirebaseFirestore.instance.collection('notifications');
@@ -414,4 +415,144 @@ class FirebaseUserRepository  implements UserRepository{
 
     await batch.commit();
   }
+   ///////////////////////////////////
+   ///
+   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+   @override
+  Future<String> getOrCreateConversation(String userId1, String userId2) async {
+    final participants = [userId1, userId2]..sort();
+    
+    final query = await _firestore
+        .collection('conversations')
+        .where('participants', isEqualTo: participants)
+        .limit(1)
+        .get();
+
+    if (query.docs.isNotEmpty) return query.docs.first.id;
+
+    final docRef = await _firestore.collection('conversations').add({
+      'participants': participants,
+      'lastUpdated': FieldValue.serverTimestamp(),
+      'lastMessage': '',
+      'lastSenderId': '',
+    });
+
+    return docRef.id;
+  }
+
+  @override
+  Stream<List<Message>> getMessages(String conversationId) {
+    return _firestore
+        .collection('conversations')
+        .doc(conversationId)
+        .collection('messages')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Message.fromSnapshot(doc))
+            .toList());
+  }
+
+  @override
+  Future<void> sendMessage(String conversationId, Message message) async {
+    final conversationRef = _firestore.collection('conversations').doc(conversationId);
+    final messagesRef = conversationRef.collection('messages');
+
+    final batch = _firestore.batch();
+
+    // Mesaj ekle
+    final messageRef = messagesRef.doc();
+    batch.set(messageRef, message.toMap());
+
+    // Konuşmayı güncelle
+    batch.update(conversationRef, {
+      'lastMessage': message.text,
+      'lastSenderId': message.senderId,
+      'lastUpdated': FieldValue.serverTimestamp(),
+    });
+
+    await batch.commit();
+  }
+
+  @override
+  Stream<List<Conversation>> getConversations(String userId) {
+    return _firestore
+        .collection('conversations')
+        .where('participants', arrayContains: userId)
+        .orderBy('lastUpdated', descending: true)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Conversation.fromSnapshot(doc))
+            .toList());
+  }
+
+  @override
+  Future<void> markMessagesAsRead(String conversationId, String userId) async {
+    final messages = await _firestore
+        .collection('conversations')
+        .doc(conversationId)
+        .collection('messages')
+        .where('senderId', isNotEqualTo: userId)
+        .where('isRead', isEqualTo: false)
+        .get();
+
+    final batch = _firestore.batch();
+    for (final doc in messages.docs) {
+      batch.update(doc.reference, {'isRead': true});
+    }
+    await batch.commit();
+  }
+
+  @override
+  Future<int> getUnreadMessagesCount(String userId) async {
+    final snapshot = await _firestore
+        .collectionGroup('messages')
+        .where('senderId', isNotEqualTo: userId)
+        .where('isRead', isEqualTo: false)
+        .count()
+        .get();
+
+    return snapshot.count ?? 0;
+  }
+
+
+  @override
+  Future<String> createChallenge(String challengerID, String challengedID, String category) async {
+    final docRef = await _challenges.add({
+      'challengerID': challengerID,
+      'challengedID': challengedID,
+      'category': category,
+      'challengerScore': 0,
+      'challengedScore': 0,
+      'createdAt': FieldValue.serverTimestamp(),
+      'status': 'active'
+    });
+    return docRef.id;
+  }
+
+  @override
+  Future<void> updateChallengeScore(String challengeID, bool isChallenger, int score) async {
+    final field = isChallenger ? 'challengerScore' : 'challengedScore';
+    await _challenges.doc(challengeID).update({
+      field: score,
+      'status': score > 0 ? 'completed' : 'active'
+    });
+  }
+
+  @override
+  Stream<Challenge> getChallengeUpdates(String challengeID) {
+    return _challenges.doc(challengeID).snapshots().map(Challenge.fromSnapshot);
+  }
+
+  @override
+  Stream<List<Challenge>> getUserChallenges(String userID) {
+    return _challenges
+        .where('status', whereIn: ['active', 'completed'])
+        .where('challengerID', isEqualTo: userID)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map(Challenge.fromSnapshot)
+            .toList());
+  }
+
 }

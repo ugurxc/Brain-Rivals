@@ -117,7 +117,35 @@ class _FriendListItem extends StatelessWidget {
         subtitle: Text(friend.email),
         trailing: IconButton(
           icon: const Icon(Icons.message),
-          onPressed: () {
+          // _FriendListItem widget'ı içinde
+onPressed: () async {
+  final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+  final userRepo = Provider.of<UserRepository>(context, listen: false);
+  
+  try {
+    final conversationId = await userRepo.getOrCreateConversation(
+      currentUserId, 
+      friend.id
+    );
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatScreen(
+          conversationId: conversationId,
+          currentUserId: currentUserId,
+          friendId: friend.id,
+          friendImageUrl: friend.picture,
+        ),
+      ),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Hata: ${e.toString()}')),
+    );
+  }
+},
+        /*   onPressed: () {
             Navigator.push(
   context,
   MaterialPageRoute(
@@ -127,7 +155,7 @@ class _FriendListItem extends StatelessWidget {
     ),
   ),
 );
-          },
+          }, */
         ),
       ),
     );

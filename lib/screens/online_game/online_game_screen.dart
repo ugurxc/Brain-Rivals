@@ -2,23 +2,25 @@ import 'package:brain_rivals/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:brain_rivals/constant.dart';
 
 import 'package:brain_rivals/widgets/soru_cevap_widget.dart';
+import 'package:brain_rivals/widgets/soru_cevap_widget_online.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:lottie/lottie.dart';
+import 'package:user_repository/user_repository.dart';
 
-class OfflineGameScreen extends StatefulWidget {
+class OnlineGameScreen extends StatefulWidget {
     final String text;
-  
+  final MyUser? friend;
   final String categoryName;
   final IconData icon;
-  const OfflineGameScreen({super.key, required this.text, required this.categoryName, required this.icon});
+  const OnlineGameScreen({super.key, required this.text, required this.categoryName, required this.icon, this.friend});
 
   @override
-  State<OfflineGameScreen> createState() => _OfflineGameScreenState();
+  State<OnlineGameScreen> createState() => _OfflineGameScreenState();
 }
 
-class _OfflineGameScreenState extends State<OfflineGameScreen> {
+class _OfflineGameScreenState extends State<OnlineGameScreen> {
 
 
 
@@ -103,8 +105,8 @@ class _OfflineGameScreenState extends State<OfflineGameScreen> {
               
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child:  QuizQuestionWidget(
-                
+              child:  QuizQuestionOnlineWidget(
+                friend: widget.friend,
                     text: widget.text,
     categoryName:widget.categoryName,
     icon:widget.icon

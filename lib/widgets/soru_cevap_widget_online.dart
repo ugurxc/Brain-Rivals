@@ -269,8 +269,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:user_repository/user_repository.dart';
 
-class QuizQuestionWidget extends StatefulWidget {
-  const QuizQuestionWidget({super.key, required this.text, required this.categoryName, required this.icon, this.friend});
+class QuizQuestionOnlineWidget extends StatefulWidget {
+  const QuizQuestionOnlineWidget({super.key, required this.text, required this.categoryName, required this.icon, this.friend});
       final String text;
   final MyUser? friend;
   final String categoryName;
@@ -278,10 +278,10 @@ class QuizQuestionWidget extends StatefulWidget {
    
 
   @override
-  State<QuizQuestionWidget> createState() => _QuizQuestionWidgetState();
+  State<QuizQuestionOnlineWidget> createState() => _QuizQuestionWidgetState();
 }
 
-class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
+class _QuizQuestionWidgetState extends State<QuizQuestionOnlineWidget> {
   List<Question> _questions = [];
   int index = 0;
   bool isAlreadySelected = false;

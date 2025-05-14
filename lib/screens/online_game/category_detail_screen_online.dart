@@ -1,21 +1,25 @@
 import 'package:brain_rivals/constant.dart';
 
-import 'package:brain_rivals/screens/offline_game_screen.dart';
+import 'package:brain_rivals/screens/offline_game/offline_game_screen.dart';
+import 'package:brain_rivals/screens/online_game/online_game_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-class DetailPage extends StatelessWidget {
+import 'package:user_repository/user_repository.dart';
+class DetailPageOnline extends StatelessWidget {
   final String text;
   
   final String categoryName;
   final IconData icon;
   final String imageUrl;
+  final MyUser? friend;
 
-  const DetailPage({
+  const DetailPageOnline({
     super.key,
     required this.icon,
     required this.text,
     required this.imageUrl,
-    required this.categoryName
+    required this.categoryName, this.friend
+    
   });
 
   @override
@@ -38,7 +42,7 @@ class DetailPage extends StatelessWidget {
 
             const SizedBox(height: 40,),
             Text(
-              "$text kategorisi",
+              "$text kategorisi ",
               style: const TextStyle(
                 fontSize: 24,
                 color: Color.fromARGB(255, 84, 78, 78),
@@ -71,10 +75,11 @@ class DetailPage extends StatelessWidget {
               onPressed: () {
               Navigator.push(
   context,
-  MaterialPageRoute(builder: (context) =>  OfflineGameScreen(
+  MaterialPageRoute(builder: (context) =>  OnlineGameScreen(
     text:text,
     categoryName:categoryName,
-    icon:icon
+    icon:icon,
+    friend: friend,
 
   )),
 );

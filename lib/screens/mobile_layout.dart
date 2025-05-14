@@ -3,7 +3,8 @@ import 'package:brain_rivals/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:brain_rivals/constant.dart';
 import 'package:brain_rivals/screens/login_screen.dart';
 import 'package:brain_rivals/screens/my_profile.dart';
-import 'package:brain_rivals/screens/offline_category_screen.dart';
+import 'package:brain_rivals/screens/offline_game/offline_category_screen.dart';
+import 'package:brain_rivals/screens/online_game/online_game_invite_page.dart';
 import 'package:brain_rivals/screens/social_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -202,7 +203,7 @@ class _MobileLayoutState extends State<MobileLayout> {
                     "assets/images/BrainRivals4545.png",
                   )),
               const SizedBox(
-                height: 20,
+                height: 40,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -242,22 +243,31 @@ class _MobileLayoutState extends State<MobileLayout> {
                   ),
                   Column(
                     children: [
-                      Container(
-                          decoration: BoxDecoration(
-                            // Çerçevenin arka plan rengi
-                            border: Border.all(
-                              color: kPrimaryLightColor, // Çerçeve rengi
-                              width: 5, // Çerçeve kalınlığı
+                      GestureDetector(
+                          onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) {
+                              return const OnlineGameInvitePage( );
+                            },
+                          ));
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                              // Çerçevenin arka plan rengi
+                              border: Border.all(
+                                color: kPrimaryLightColor, // Çerçeve rengi
+                                width: 5, // Çerçeve kalınlığı
+                              ),
+                              borderRadius: BorderRadius.circular(15), // Yuvarlak köşe
                             ),
-                            borderRadius: BorderRadius.circular(15), // Yuvarlak köşe
-                          ),
-                          height: 100,
-                          width: 100,
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
-                                "assets/images/login3.jpg",
-                              ))),
+                            height: 100,
+                            width: 100,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset(
+                                  "assets/images/login3.jpg",
+                                ))),
+                      ),
                       const Text(
                         "Çevrim içi",
                         style: TextStyle(color: Colors.white),
@@ -269,26 +279,11 @@ class _MobileLayoutState extends State<MobileLayout> {
               const SizedBox(
                 height: 8,
               ),
-              Column(
+              const Column(
                 children: [
-                  Container(
-                      decoration: BoxDecoration(
-                        // Çerçevenin arka plan rengi
-                        border: Border.all(
-                          color: kPrimaryLightColor, // Çerçeve rengi
-                          width: 5, // Çerçeve kalınlığı
-                        ),
-                        borderRadius: BorderRadius.circular(15), // Yuvarlak köşe
-                      ),
-                      height: 100,
-                      width: 100,
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            "assets/images/login2.jpg",
-                          ))),
-                  const Text(
-                    "Yapay Zekaya Karşı",
+                  SizedBox(height: 80,width: 100,),
+                  Text(
+                    "",
                     style: TextStyle(color: Colors.white),
                   )
                 ],
@@ -336,3 +331,30 @@ class _MobileLayoutState extends State<MobileLayout> {
     );
   }
 }
+
+
+
+ /* Column(
+                children: [
+                  Container(
+                      decoration: BoxDecoration(
+                        // Çerçevenin arka plan rengi
+                        border: Border.all(
+                          color: kPrimaryLightColor, // Çerçeve rengi
+                          width: 5, // Çerçeve kalınlığı
+                        ),
+                        borderRadius: BorderRadius.circular(15), // Yuvarlak köşe
+                      ),
+                      height: 100,
+                      width: 100,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            "assets/images/login2.jpg",
+                          ))),
+                  const Text(
+                    "Yapay Zekaya Karşı",
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              ), */

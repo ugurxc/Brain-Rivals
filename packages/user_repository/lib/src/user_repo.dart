@@ -48,5 +48,18 @@ Stream<List<AppNotification>> getNotifications(String userId);
   Future<void> deleteNotification(String notificationId);
     Stream<List<MyUser>> getFriendsStream(String userId);
   Future<void> removeFriend(String userId, String friendId);
+
+    Future<String> getOrCreateConversation(String userId1, String userId2);
+  Stream<List<Message>> getMessages(String conversationId);
+  Future<void> sendMessage(String conversationId, Message message);
+  Stream<List<Conversation>> getConversations(String userId);
+  Future<void> markMessagesAsRead(String conversationId, String userId);
+  Future<int> getUnreadMessagesCount(String userId);
+
+
+    Future<String> createChallenge(String challengerID, String challengedID, String category);
+  Future<void> updateChallengeScore(String challengeID, bool isChallenger, int score);
+  Stream<Challenge> getChallengeUpdates(String challengeID);
+  Stream<List<Challenge>> getUserChallenges(String userID);
 }
 

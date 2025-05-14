@@ -1,5 +1,6 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -115,4 +116,122 @@ class AppNotification  extends Equatable {
 
   @override
   List<Object?> get props => [id, userId, type, senderId, status];
+}
+
+
+// message.dart
+
+
+class Message extends Equatable {
+  final String id;
+  final String senderId;
+  final String text;
+  final DateTime createdAt;
+  final bool isRead;
+
+  const Message({
+    required this.id,
+    required this.senderId,
+    required this.text,
+    required this.createdAt,
+    this.isRead = false,
+  });
+
+  factory Message.fromSnapshot(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return Message(
+      id: doc.id,
+      senderId: data['senderId'],
+      text: data['text'],
+      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      isRead: data['isRead'] ?? false,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'senderId': senderId,
+      'text': text,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'isRead': isRead,
+    };
+  }
+
+  @override
+  List<Object?> get props => [id, senderId, text, createdAt, isRead];
+}
+
+class Conversation extends Equatable {
+  final String id;
+  final List<String> participants;
+  final DateTime lastUpdated;
+  final String lastMessage;
+  final String lastSenderId;
+
+  const Conversation({
+    required this.id,
+    required this.participants,
+    required this.lastUpdated,
+    required this.lastMessage,
+    required this.lastSenderId,
+  });
+
+  factory Conversation.fromSnapshot(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return Conversation(
+      id: doc.id,
+      participants: List<String>.from(data['participants']),
+      lastUpdated: (data['lastUpdated'] as Timestamp).toDate(),
+      lastMessage: data['lastMessage'],
+      lastSenderId: data['lastSenderId'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'participants': participants,
+      'lastUpdated': FieldValue.serverTimestamp(),
+      'lastMessage': lastMessage,
+      'lastSenderId': lastSenderId,
+    };
+  }
+
+  @override
+  List<Object?> get props => [id, participants, lastUpdated, lastMessage];
+}
+
+class Challenge {
+  final String id;
+  final String challengerID;
+  final String challengedID;
+  final String category;
+  final int challengerScore;
+  final int challengedScore;
+  final DateTime createdAt;
+  final String status;
+
+  const Challenge({
+    required this.id,
+    required this.challengerID,
+    required this.challengedID,
+    required this.category,
+    required this.challengerScore,
+    required this.challengedScore,
+    required this.createdAt,
+    required this.status,
+  });
+
+  factory Challenge.fromSnapshot(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return Challenge(
+      id: doc.id,
+      challengerID: data['challengerID'],
+      challengedID: data['challengedID'],
+      category: data['category'],
+      challengerScore: data['challengerScore'],
+      challengedScore: data['challengedScore'],
+      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      status: data['status'],
+    );
+  }
 }
