@@ -11,10 +11,12 @@ import 'package:user_repository/user_repository.dart';
 
 class OnlineGameScreen extends StatefulWidget {
     final String text;
+    final String challengeID;
+    final bool isChallenger;
   final MyUser? friend;
   final String categoryName;
   final IconData icon;
-  const OnlineGameScreen({super.key, required this.text, required this.categoryName, required this.icon, this.friend});
+  const OnlineGameScreen({super.key, required this.text, required this.categoryName, required this.icon, this.friend, required this.challengeID, required this.isChallenger});
 
   @override
   State<OnlineGameScreen> createState() => _OfflineGameScreenState();
@@ -23,7 +25,18 @@ class OnlineGameScreen extends StatefulWidget {
 class _OfflineGameScreenState extends State<OnlineGameScreen> {
 
 
+ late final FirebaseUserRepository userRepo;
 
+  @override
+  void initState() {
+    super.initState();
+
+    // FirebaseAuth'ten current user ID alınıyor
+    
+
+    // UserRepository örneği oluşturuluyor ve instance değişkene atılıyor
+    userRepo = FirebaseUserRepository();
+  }
 
 
   @override
@@ -54,6 +67,12 @@ class _OfflineGameScreenState extends State<OnlineGameScreen> {
               ElevatedButton(
                  style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.green)),
                 onPressed: () {
+                      // Skoru sıfırla ve çık
+              userRepo.updateChallengeScore(
+                widget.challengeID,
+                widget.isChallenger,
+                0
+              );
                   Navigator.of(context).popUntil((route) => route.isFirst);
                 },
                 child: const Text("Evet"  , style: TextStyle(color: Colors.white)),
@@ -106,6 +125,8 @@ class _OfflineGameScreenState extends State<OnlineGameScreen> {
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child:  QuizQuestionOnlineWidget(
+                challengeID:widget.challengeID,
+                isChallenger:widget.isChallenger,
                 friend: widget.friend,
                     text: widget.text,
     categoryName:widget.categoryName,

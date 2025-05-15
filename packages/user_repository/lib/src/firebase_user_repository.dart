@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../user_repository.dart';
 
@@ -517,7 +519,7 @@ class FirebaseUserRepository  implements UserRepository{
 
 
   @override
-  Future<String> createChallenge(String challengerID, String challengedID, String category) async {
+  Future<String> createChallenge(String challengerID, String challengedID, String category, IconData icon ) async {
     final docRef = await _challenges.add({
       'challengerID': challengerID,
       'challengedID': challengedID,
@@ -525,19 +527,37 @@ class FirebaseUserRepository  implements UserRepository{
       'challengerScore': 0,
       'challengedScore': 0,
       'createdAt': FieldValue.serverTimestamp(),
-      'status': 'active'
+      'status': 'active',
+      'icon':{
+      'codePoint': icon.codePoint,
+      'fontFamily': icon.fontFamily,
+      'fontPackage': icon.fontPackage, // FontAwesome için bu genellikle 'font_awesome_flutter'
+    }
     });
     return docRef.id;
   }
 
   @override
+
   Future<void> updateChallengeScore(String challengeID, bool isChallenger, int score) async {
+  final field = isChallenger ? 'challengerScore' : 'challengedScore';
+  
+  await _challenges.doc(challengeID).update({
+    field: score,
+    'status': (score >= 0) ? 'active' : 'pending',
+    if(isChallenger) 'challengerPlayed': true,
+    if(!isChallenger) 'challengedPlayed': true,
+  });
+}
+
+
+  /* Future<void> updateChallengeScore(String challengeID, bool isChallenger, int score) async {
     final field = isChallenger ? 'challengerScore' : 'challengedScore';
     await _challenges.doc(challengeID).update({
       field: score,
       'status': score > 0 ? 'completed' : 'active'
     });
-  }
+  } */
 
   @override
   Stream<Challenge> getChallengeUpdates(String challengeID) {
@@ -545,14 +565,79 @@ class FirebaseUserRepository  implements UserRepository{
   }
 
   @override
-  Stream<List<Challenge>> getUserChallenges(String userID) {
-    return _challenges
-        .where('status', whereIn: ['active', 'completed'])
-        .where('challengerID', isEqualTo: userID)
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map(Challenge.fromSnapshot)
-            .toList());
-  }
+/*  Stream<List<Challenge>> getUserChallenges(String userID) {
+  return _challenges
+      .where('status', whereIn: ['active', 'completed'])
+      .where('challengerID', isEqualTo: userID)
+      .snapshots()
+      .map((snapshot) => snapshot.docs
+          .map(Challenge.fromSnapshot)
+          .toList());
+} */
+Stream<List<Challenge>> getUserChallenges(String userID) {
+  final challengerStream = _challenges
+      .where('challengerID', isEqualTo: userID)
+      .where('status', whereIn: ['active', 'completed'])
+      .snapshots()
+      .map(_convertToChallenges);
 
+  final challengedStream = _challenges
+      .where('challengedID', isEqualTo: userID)
+      .where('status', whereIn: ['active', 'completed'])
+      .snapshots()
+      .map(_convertToChallenges);
+
+  return Rx.combineLatest2<List<Challenge>, List<Challenge>, List<Challenge>>(
+    challengerStream,
+    challengedStream,
+    (challengerList, challengedList) {
+      final all = [...challengerList, ...challengedList];
+      final seen = <String>{};
+      final unique = all.where((c) => seen.add(c.id)).toList();
+      unique.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      return unique;
+    },
+  );
+}
+
+List<Challenge> _convertToChallenges(QuerySnapshot snapshot) {
+  return snapshot.docs.map(Challenge.fromSnapshot).toList();
+}
+  @override
+  
+Future<MyUser> getUser(String userId) async {
+  try {
+    final docSnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .get();
+
+    if (docSnapshot.exists && docSnapshot.data() != null) {
+      final data = docSnapshot.data()!;
+      final entity = MyUserEntity.fromDocument(data);
+      return MyUser.fromEntity(entity);
+    } else {
+      // Kullanıcı bulunamadıysa boş MyUser döndür
+      return MyUser.empty;
+    }
+  } catch (e) {
+    print('Hata oluştu: $e');
+    // Hata durumunda da boş bir kullanıcı döndür
+    return MyUser.empty;
+  }
+}
+
+ @override
+  Future<void> completeChallenge(String challengeId) async {
+    try {
+      await _challenges.doc(challengeId).update({
+        'status': 'completed',
+      });
+      print('Challenge $challengeId başarıyla tamamlandı.');
+    } on FirebaseException catch (e) {
+      // Hata yönetimi
+      print('Challenge güncellenirken hata oluştu: ${e.message}');
+      rethrow;
+    }
+  }
 }

@@ -2,6 +2,7 @@
 
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 
 
@@ -57,9 +58,11 @@ Stream<List<AppNotification>> getNotifications(String userId);
   Future<int> getUnreadMessagesCount(String userId);
 
 
-    Future<String> createChallenge(String challengerID, String challengedID, String category);
+    Future<String> createChallenge(String challengerID, String challengedID, String category , IconData icon);
   Future<void> updateChallengeScore(String challengeID, bool isChallenger, int score);
   Stream<Challenge> getChallengeUpdates(String challengeID);
   Stream<List<Challenge>> getUserChallenges(String userID);
+   Future<MyUser> getUser(String userID);
+   Future<void> completeChallenge(String challengeId);
 }
 

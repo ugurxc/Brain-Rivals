@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:user_repository/user_repository.dart';
 
 // ignore: must_be_immutable
@@ -62,6 +63,9 @@ class MyUser extends Equatable {
       friends: entity.friends, // Model'e aktar
     );
   }
+
+
+
 
   @override
   List<Object?> get props => [id, email, name, picture, friends];
@@ -201,6 +205,9 @@ class Conversation extends Equatable {
 }
 
 class Challenge {
+   final IconData icon;
+   final bool challengerPlayed;
+  final bool challengedPlayed;
   final String id;
   final String challengerID;
   final String challengedID;
@@ -210,7 +217,10 @@ class Challenge {
   final DateTime createdAt;
   final String status;
 
-  const Challenge({
+  const Challenge(  {
+    required this.icon,
+    required this.challengerPlayed,
+    required this.challengedPlayed,
     required this.id,
     required this.challengerID,
     required this.challengedID,
@@ -223,8 +233,16 @@ class Challenge {
 
   factory Challenge.fromSnapshot(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
+    final iconData = data['icon'] as Map<String, dynamic>;
     return Challenge(
+      icon:  IconData(
+      iconData['codePoint'],
+      fontFamily: iconData['fontFamily'],
+      fontPackage: iconData['fontPackage'], // FontAwesome için bu genellikle 'font_awesome_flutter'
+    ),
       id: doc.id,
+       challengerPlayed: data['challengerScore'] >= 0,
+      challengedPlayed: data['challengedScore'] >= 0,
       challengerID: data['challengerID'],
       challengedID: data['challengedID'],
       category: data['category'],

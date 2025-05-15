@@ -267,14 +267,17 @@ import 'package:flutter/material.dart';
 import 'package:brain_rivals/constant.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:user_repository/user_repository.dart';
 
 class QuizQuestionOnlineWidget extends StatefulWidget {
-  const QuizQuestionOnlineWidget({super.key, required this.text, required this.categoryName, required this.icon, this.friend});
+  const QuizQuestionOnlineWidget({super.key, required this.text, required this.categoryName, required this.icon, this.friend, required this.isChallenger, required this.challengeID});
       final String text;
   final MyUser? friend;
   final String categoryName;
   final IconData icon;
+  final bool isChallenger;
+  final String challengeID;
    
 
   @override
@@ -363,7 +366,22 @@ class _QuizQuestionWidgetState extends State<QuizQuestionOnlineWidget> {
     });
   }
 
-  void showEndDialog() {
+  void showEndDialog()  async{
+    final userRepo = Provider.of<UserRepository>(context, listen: false);
+  userRepo.updateChallengeScore(
+    widget.challengeID,
+    widget.isChallenger,
+    score
+  );
+  if (!widget.isChallenger) {
+  try {
+    await userRepo.completeChallenge(widget.challengeID);
+    // Güncelleme başarılıysa burası çalışır
+    // Sonraki işlemleriniz burada olabilir
+  } catch (e) {
+    // Hata yönetimi
+  }
+}
     String message;
     if (score == 0) {
       message = "Tekrar denemelisin";

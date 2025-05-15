@@ -1,3 +1,4 @@
+import 'package:brain_rivals/screens/online_game/history_screen.dart';
 import 'package:brain_rivals/screens/online_game/invite_firend_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -88,7 +89,12 @@ class OnlineGameInvitePage extends StatelessWidget {
                   // Geçmiş Container
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/history');
+                      Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>  HistoryScreen(),
+      ),
+    );
                     },
                     child: Container(
                       width: double.infinity,

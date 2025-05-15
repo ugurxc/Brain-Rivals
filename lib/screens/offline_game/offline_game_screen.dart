@@ -1,5 +1,7 @@
 import 'package:brain_rivals/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:brain_rivals/constant.dart';
+import 'package:brain_rivals/screens/ai_screens/ui.dart';
+import 'package:brain_rivals/screens/online_game/history_screen.dart';
 
 import 'package:brain_rivals/widgets/soru_cevap_widget.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +94,13 @@ class _OfflineGameScreenState extends State<OfflineGameScreen> {
                       ],
                     ), 
 
-                     SizedBox(height: 100, width: 100,child: Lottie.asset("assets/lottie/lot02.json"),)
+                     GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                          return const YapayZekaUi();
+                        },));
+                      },
+                      child: SizedBox(height: 100, width: 100,child: Lottie.asset("assets/lottie/lot02.json"),))
                   ],
                 );
               },
