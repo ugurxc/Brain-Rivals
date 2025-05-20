@@ -461,7 +461,7 @@ class _QuizQuestionWidgetState extends State<QuizQuestionOnlineWidget> {
       
       
         children: [
-          const SizedBox(height: 20,),
+       /*    const SizedBox(height: 20,),
          widget.friend != null?  Container(
           decoration:  BoxDecoration(
              borderRadius: BorderRadius.circular(20),
@@ -484,7 +484,7 @@ class _QuizQuestionWidgetState extends State<QuizQuestionOnlineWidget> {
                color: Colors.black,
              ),
            ),
-         ): const SizedBox.shrink() ,
+         ): const SizedBox.shrink() , */
           SizedBox( height: 500, width: 300,child: Center(child: Lottie.asset("assets/lottie/lot_loading02.json")),),
         ],
       ); 

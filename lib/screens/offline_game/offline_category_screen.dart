@@ -3,6 +3,7 @@ import 'package:brain_rivals/constant.dart';
 import 'package:brain_rivals/screens/offline_game/category_detail_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class OfflineCategoryScreen extends StatefulWidget {
@@ -51,7 +52,12 @@ class _OfflineCategoryScreenState extends State<OfflineCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: () {
-        addQuestionToFirestore();
+        //addQuestionToFirestore();
+        Gemini.instance.promptStream(parts: [
+  Part.text('Fatih terimin galatasaray ile kaç tane lig şampiyonluğu vardır?'),
+]).listen((value) {
+  print(value?.output);
+});
       },),
       backgroundColor: Colors.green,
       appBar: AppBar(

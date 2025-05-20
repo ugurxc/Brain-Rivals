@@ -1,5 +1,6 @@
 import 'package:brain_rivals/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:brain_rivals/constant.dart';
+import 'package:brain_rivals/screens/ai_screens/ui.dart';
 
 import 'package:brain_rivals/widgets/soru_cevap_widget.dart';
 import 'package:brain_rivals/widgets/soru_cevap_widget_online.dart';
@@ -37,7 +38,7 @@ class _OfflineGameScreenState extends State<OnlineGameScreen> {
     // UserRepository örneği oluşturuluyor ve instance değişkene atılıyor
     userRepo = FirebaseUserRepository();
   }
-
+bool _hasNavigatedToYapayZeka = false;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +114,19 @@ class _OfflineGameScreenState extends State<OnlineGameScreen> {
                       ],
                     ), 
 
-                     SizedBox(height: 100, width: 100,child: Lottie.asset("assets/lottie/lot02.json"),)
+                     GestureDetector(
+                      onTap: () {
+                        if (!_hasNavigatedToYapayZeka) {
+                          setState(() {
+                            _hasNavigatedToYapayZeka = true;
+                          });
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return const YapayZekaUi();
+                          }));
+                        }
+                      },
+                      child: SizedBox(height: 100, width: 100,child: Lottie.asset("assets/lottie/lot02.json"),))
                   ],
                 );
               },

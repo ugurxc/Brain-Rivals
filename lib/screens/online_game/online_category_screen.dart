@@ -100,24 +100,26 @@ class _OfflineCategoryScreenState extends State<OnlineCategoryScreen> {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Column(
+                   Column(
                     children: [
                       CategoryOnline(
                         iconData: FontAwesomeIcons.landmark,
                         categoryName: "history01",
                         text: "Tarih",
                         imageUrl: "assets/images/tarih.jpg",
+                        friend: widget.friend,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      CategoryOnline(
+                       CategoryOnline(
                         iconData: FontAwesomeIcons.palette,
                         categoryName: "art01",
                         text: "Sanat",
                         imageUrl: "assets/images/sanat.jpg",
+                        friend: widget.friend,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                     ],
@@ -125,22 +127,24 @@ class _OfflineCategoryScreenState extends State<OnlineCategoryScreen> {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Column(
+                   Column(
                     children: [
                       CategoryOnline(
                         iconData: FontAwesomeIcons.vials,
                         categoryName: "science01",
                         text: "Bilim",
                         imageUrl: "assets/images/bilim.png",
+                        friend: widget.friend,
                       ),
-                      SizedBox(height: 10,),
-                      CategoryOnline(
+                      const SizedBox(height: 10,),
+                       CategoryOnline(
                         iconData: FontAwesomeIcons.mixer,
                         categoryName: "mixed01",
                         text: "Karışık",
                         imageUrl: "assets/images/karisik.jpg",
+                        friend: widget.friend,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                     ],
@@ -152,7 +156,7 @@ class _OfflineCategoryScreenState extends State<OnlineCategoryScreen> {
             const SizedBox(height: 20,),
             const Text("Dizi ve Animasyon" ,  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold , fontSize: 22),),
             const SizedBox(height: 10),
-            const SingleChildScrollView(
+             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
@@ -161,34 +165,39 @@ class _OfflineCategoryScreenState extends State<OnlineCategoryScreen> {
                     categoryName: "gibi01",
                         text: "Gibi",
                         imageUrl: "assets/images/gibi.jpg",
+                        friend: widget.friend,
                       ),
-                      SizedBox(width: 10,),
-                      CategoryOnline(
+                      const SizedBox(width: 10,),
+                       CategoryOnline(
                         iconData: FontAwesomeIcons.film,
                         categoryName: "prens01",
                         text: "Prens",
                         imageUrl: "assets/images/prens.jpg",
+                        friend: widget.friend,
                       ),
-                       SizedBox(width: 10,),
-                      CategoryOnline(
+                       const SizedBox(width: 10,),
+                       CategoryOnline(
                         iconData: FontAwesomeIcons.film,
                         categoryName: "piece01",
                         text: "One-Piece",
                         imageUrl: "assets/images/onepiece.webp",
+                        friend: widget.friend,
                       ),
-                      SizedBox(width: 10,),
-                      CategoryOnline(
+                      const SizedBox(width: 10,),
+                       CategoryOnline(
                         iconData: FontAwesomeIcons.film,
                         categoryName: "arcane01",
                         text: "Arcane",
                         imageUrl: "assets/images/arcane.webp",
+                        friend: widget.friend,
                       ),
-                       SizedBox(width: 10,),
-                        CategoryOnline(
+                       const SizedBox(width: 10,),
+                         CategoryOnline(
                           iconData: FontAwesomeIcons.film,
                           categoryName: "bleach01",
                         text: "Bleach",
                         imageUrl: "assets/images/bleach.webp",
+                        friend: widget.friend,
                       ),
                       
                 ],
@@ -198,7 +207,7 @@ class _OfflineCategoryScreenState extends State<OnlineCategoryScreen> {
              const SizedBox(height: 20,),
             const Text("Hayat" ,  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold , fontSize: 22),),
             const SizedBox(height: 10,),
-                        const SingleChildScrollView(
+                         SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
@@ -207,27 +216,31 @@ class _OfflineCategoryScreenState extends State<OnlineCategoryScreen> {
                     categoryName: "food01",
                         text: "Beslenme",
                         imageUrl: "assets/images/beslenme.jpg",
+                        friend: widget.friend,
                       ),
-                      SizedBox(width: 10,),
-                      CategoryOnline(  
+                      const SizedBox(width: 10,),
+                       CategoryOnline(  
                         iconData: FontAwesomeIcons.brain,
                         categoryName: "philosophy01",
                         text: "Felsefe",
                         imageUrl: "assets/images/felsefe.jpg",
+                        friend: widget.friend,
                       ),
-                       SizedBox(width: 10,),
-                      CategoryOnline(
+                       const SizedBox(width: 10,),
+                       CategoryOnline(
                         iconData: FontAwesomeIcons.personFalling,
                         categoryName: "culture01",
                         text: "Genel kültür",
                         imageUrl: "assets/images/genelkültür.jpeg",
+                        friend: widget.friend,
                       ),
-                      SizedBox(width: 10,),
-                      CategoryOnline(
+                      const SizedBox(width: 10,),
+                       CategoryOnline(
                         iconData: FontAwesomeIcons.headSideCough,
                         categoryName: "communication01",
                         text: "İletişim",
                         imageUrl: "assets/images/iletisim.avif",
+                        friend: widget.friend,
                       ),
                       
                       
@@ -239,7 +252,7 @@ class _OfflineCategoryScreenState extends State<OnlineCategoryScreen> {
              const SizedBox(height: 20,),
             const Text("Popüler" ,  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold , fontSize: 22),),
             const SizedBox(height: 10,),
-             const SingleChildScrollView(
+              SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
@@ -248,20 +261,23 @@ class _OfflineCategoryScreenState extends State<OnlineCategoryScreen> {
                     categoryName: "turkishRap01",
                         text: "Türkçe Rap",
                         imageUrl: "assets/images/rap.jpg",
+                        friend: widget.friend,
                       ),
-                      SizedBox(width: 10,),
+                      const SizedBox(width: 10,),
                       CategoryOnline( 
                         iconData: FontAwesomeIcons.futbol,
                         categoryName: "galatasaray01", 
                         text: "Galatasaray",
                         imageUrl: "assets/images/gs.jpg",
+                        friend: widget.friend,
                       ),
-                       SizedBox(width: 10,),
+                       const SizedBox(width: 10,),
                       CategoryOnline(
                         iconData: FontAwesomeIcons.music,
                         categoryName: "pop01",
                         text: "90'lar pop",
                         imageUrl: "assets/images/pop.jpg",
+                        friend: widget.friend,
                       ),
                      
                       

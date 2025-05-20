@@ -24,7 +24,7 @@ class _OfflineGameScreenState extends State<OfflineGameScreen> {
 
 
 
-
+ bool _hasNavigatedToYapayZeka = false;
 
   @override
   Widget build(BuildContext context) {
@@ -96,9 +96,15 @@ class _OfflineGameScreenState extends State<OfflineGameScreen> {
 
                      GestureDetector(
                       onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return const YapayZekaUi();
-                        },));
+                        if (!_hasNavigatedToYapayZeka) {
+                          setState(() {
+                            _hasNavigatedToYapayZeka = true;
+                          });
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return const YapayZekaUi();
+                          }));
+                        }
                       },
                       child: SizedBox(height: 100, width: 100,child: Lottie.asset("assets/lottie/lot02.json"),))
                   ],
