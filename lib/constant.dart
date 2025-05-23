@@ -14,4 +14,3 @@ const Color  incorrect =  Color.fromARGB(255, 197, 4, 4);
 
 
 
-const String geminiApiKey="AIzaSyBkJG96oCkgK6OL4SOQgAkaL05aLymNgJ4";
