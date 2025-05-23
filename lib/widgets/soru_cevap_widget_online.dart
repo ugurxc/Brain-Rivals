@@ -259,6 +259,7 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
  */
 
 import 'package:brain_rivals/models/question_model.dart';
+import 'package:brain_rivals/screens/mobile_layout.dart';
 import 'package:brain_rivals/widgets/next_button.dart';
 import 'package:brain_rivals/widgets/option._card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -294,7 +295,34 @@ class _QuizQuestionWidgetState extends State<QuizQuestionOnlineWidget> {
   bool isLoading = true; // Sorular yükleniyor göstergesi
 
 
+  Future<void> _handleChallengeCompletion(String challengeID) async {
+try {
+    final challengeDoc = await FirebaseFirestore.instance
+        .collection('challenges')
+        .doc(challengeID)
+        .get();
+
+    final data = challengeDoc.data()!;
+    final challengerScore = data['challengerScore'] as int;
+    final challengedScore = data['challengedScore'] as int;
+
+    if (challengerScore == challengedScore) return;
+
+    final winnerID = challengerScore > challengedScore 
+        ? data['challengerID'] 
+        : data['challengedID'];
+    final loserID = winnerID == data['challengerID'] 
+        ? data['challengedID'] 
+        : data['challengerID'];
+
+    // İstatistikleri transaction dışında güncelle
+    await Provider.of<UserRepository>(context, listen: false)
+        .updateUserStats(winnerID, loserID);
+  } catch (e) {
+    print("Hata: $e");
+  }
   
+}
 
 
   Future<void> fetchRandomQuestions() async {
@@ -324,10 +352,55 @@ class _QuizQuestionWidgetState extends State<QuizQuestionOnlineWidget> {
     }
   }
 
+Future<void> _handleChallenger() async {
+    // 1. Rastgele 5 soru çek
+    await fetchRandomQuestions();
+    
+    // 2. Soru ID'lerini challenge'a kaydet
+    final questionIDs = _questions.map((q) => q.id).toList();
+    await Provider.of<UserRepository>(context, listen: false)
+      .updateChallengeQuestions(widget.challengeID, questionIDs);
+  }
+
+  Future<void> _handleChallenged() async {
+    setState(() => isLoading = true);
+    
+    try {
+      // 1. Challenge dokümanını getir
+      final challengeDoc = await FirebaseFirestore.instance
+        .collection('challenges')
+        .doc(widget.challengeID)
+        .get();
+
+      // 2. Soru ID'lerini al
+      final questionIDs = (challengeDoc.data()!['questionIDs'] as List).cast<String>();
+      
+      // 3. Soruları ID'lerle çek
+      final questions = await Future.wait(
+        questionIDs.map((id) => FirebaseFirestore.instance
+          .collection('categories')
+          .doc(widget.categoryName)
+          .collection('questions')
+          .doc(id)
+          .get()
+          .then((doc) => Question.fromFirestore(doc))
+      ));
+
+      setState(() {
+        _questions = questions;
+        isLoading = false;
+      });
+    } catch (e) {
+      print('Hata: $e');
+      setState(() => isLoading = false);
+    }
+  }
+
+
   @override
   void initState() {
     super.initState();
-    fetchRandomQuestions();
+    widget.isChallenger ? _handleChallenger() : _handleChallenged();
   }
 
   Future<void> nextQuestion() async {
@@ -373,7 +446,13 @@ class _QuizQuestionWidgetState extends State<QuizQuestionOnlineWidget> {
     widget.isChallenger,
     score
   );
+   if (!widget.isChallenger){
+     await _handleChallengeCompletion( widget.challengeID);
+   }
+ 
+
   if (!widget.isChallenger) {
+     
   try {
     await userRepo.completeChallenge(widget.challengeID);
     // Güncelleme başarılıysa burası çalışır
@@ -438,7 +517,10 @@ class _QuizQuestionWidgetState extends State<QuizQuestionOnlineWidget> {
                     backgroundColor: WidgetStatePropertyAll(kPrimaryColor),
                   ),
                   onPressed: () {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => const MobileLayout()),
+  (Route<dynamic> route) => false,
+);
                   },
                   child: const Text(
                     "Çıkış",

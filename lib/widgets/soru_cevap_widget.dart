@@ -259,6 +259,7 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
  */
 
 import 'package:brain_rivals/models/question_model.dart';
+import 'package:brain_rivals/screens/mobile_layout.dart';
 import 'package:brain_rivals/widgets/next_button.dart';
 import 'package:brain_rivals/widgets/option._card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -420,7 +421,10 @@ class _QuizQuestionWidgetState extends State<QuizQuestionWidget> {
                     backgroundColor: WidgetStatePropertyAll(kPrimaryColor),
                   ),
                   onPressed: () {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => const MobileLayout()),
+  (Route<dynamic> route) => false,
+);
                   },
                   child: const Text(
                     "Çıkış",

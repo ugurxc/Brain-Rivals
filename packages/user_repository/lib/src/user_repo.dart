@@ -64,5 +64,8 @@ Stream<List<AppNotification>> getNotifications(String userId);
   Stream<List<Challenge>> getUserChallenges(String userID);
    Future<MyUser> getUser(String userID);
    Future<void> completeChallenge(String challengeId);
+    Future<void> updateChallengeQuestions(String challengeID, List<String> questionIDs);
+     Future<void> updateUserStats(String winnerID, String loserID);
+     Stream<MyUser> streamMyUser(String userId);
 }
 

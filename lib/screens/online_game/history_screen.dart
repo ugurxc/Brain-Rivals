@@ -1,6 +1,7 @@
 
 
 import 'package:brain_rivals/screens/online_game/online_game_screen.dart';
+import 'package:brain_rivals/screens/other_profile_screen.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -115,11 +116,18 @@ class _ChallengeItem extends StatelessWidget {
                 final opponent = snapshot.data!;
                 
                 return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: opponent.picture != null
-                        ? AssetImage(opponent.picture!)
-                        : const AssetImage('assets/default_avatar.png') 
-                            as ImageProvider,
+                  leading: InkWell(
+                    onTap: () {
+                       Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return OtherProfilePage(user: opponent,);
+            },));
+                    },
+                    child: CircleAvatar(
+                      backgroundImage: opponent.picture != null
+                          ? AssetImage(opponent.picture!)
+                          : const AssetImage('assets/default_avatar.png') 
+                              as ImageProvider,
+                    ),
                   ),
                   title: Text(
                     opponent.name,

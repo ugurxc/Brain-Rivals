@@ -26,6 +26,9 @@ class FirebaseUserRepository  implements UserRepository{
 	/// the authentication state changes.
 	///
 	/// Emits [MyUser.empty] if the user is not authenticated.
+  /// 
+  /// 
+  /// 
 	@override
 	Stream<User?> get user {
 		return _firebaseAuth.authStateChanges().map((firebaseUser) {
@@ -33,7 +36,16 @@ class FirebaseUserRepository  implements UserRepository{
 			return user;
 		});
 	}
-
+ @override
+  Stream<MyUser> streamMyUser(String userId) {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .snapshots()
+        .map((snapshot) => MyUser.fromEntity(
+              MyUserEntity.fromDocument(snapshot.data()!),
+            ));
+  }
 	@override
   Future<MyUser> signUp(MyUser myUser, String password) async {
     try {
@@ -524,6 +536,7 @@ class FirebaseUserRepository  implements UserRepository{
       'challengerID': challengerID,
       'challengedID': challengedID,
       'category': category,
+      'questionIDs': [],
       'challengerScore': 0,
       'challengedScore': 0,
       'createdAt': FieldValue.serverTimestamp(),
@@ -538,6 +551,14 @@ class FirebaseUserRepository  implements UserRepository{
   }
 
   @override
+  Future<void> updateChallengeQuestions(String challengeID, List<String> questionIDs) async {
+    await FirebaseFirestore.instance
+      .collection('challenges')
+      .doc(challengeID)
+      .update({'questionIDs': questionIDs});
+  }
+  @override
+
 
   Future<void> updateChallengeScore(String challengeID, bool isChallenger, int score) async {
   final field = isChallenger ? 'challengerScore' : 'challengedScore';
@@ -627,6 +648,28 @@ Future<MyUser> getUser(String userId) async {
   }
 }
 
+ @override
+  Future<void> updateUserStats(String winnerID, String loserID) async {
+    final users = FirebaseFirestore.instance.collection('users');
+  
+  try {
+    await FirebaseFirestore.instance.runTransaction((transaction) async {
+      // 1. Tüm okumaları tek seferde al
+      final winnerDoc = await transaction.get(users.doc(winnerID));
+      final loserDoc = await transaction.get(users.doc(loserID));
+
+      // 2. Okumalar tamamlandıktan sonra yaz
+      transaction.update(winnerDoc.reference, {'win': FieldValue.increment(1)});
+      transaction.update(loserDoc.reference, {'lose': FieldValue.increment(1)});
+    });
+  } on FirebaseException catch (e) {
+    if (e.code == 'deadline-exceeded') {
+      // İşlemi tekrar dene veya logla
+      print("Transaction zaman aşımına uğradı, yeniden deneniyor...");
+      await updateUserStats(winnerID, loserID); // Recursive retry
+    }
+  }
+  }
  @override
   Future<void> completeChallenge(String challengeId) async {
     try {

@@ -12,8 +12,12 @@ class MyUser extends Equatable {
   final String name;
   String? picture;
   List<String> friends;
+  final int win;
+  final int lose;
 
   MyUser({
+        this.win = 0,
+    this.lose = 0,
     required this.id,
     required this.email,
     required this.name,
@@ -22,6 +26,8 @@ class MyUser extends Equatable {
   });
 
   static final empty = MyUser(
+      win: 0,
+    lose: 0,
     id: '',
     email: '',
     name: '',
@@ -29,6 +35,8 @@ class MyUser extends Equatable {
   );
 
   MyUser copyWith({
+        int? win,
+    int? lose,
     String? id,
     String? email,
     String? name,
@@ -36,6 +44,8 @@ class MyUser extends Equatable {
     List<String>? friends,
   }) {
     return MyUser(
+      win: win ?? this.win,
+      lose: lose ?? this.lose,
       id: id ?? this.id,
       email: email ?? this.email,
       name: name ?? this.name,
@@ -46,6 +56,8 @@ class MyUser extends Equatable {
 
   MyUserEntity toEntity() {
     return MyUserEntity(
+      win: win,
+      lose: lose,
       id: id,
       email: email,
       name: name,
@@ -56,6 +68,8 @@ class MyUser extends Equatable {
 
   static MyUser fromEntity(MyUserEntity entity) {
     return MyUser(
+      win: entity.win,
+      lose: entity.lose,
       id: entity.id,
       email: entity.email,
       name: entity.name,
@@ -68,7 +82,7 @@ class MyUser extends Equatable {
 
 
   @override
-  List<Object?> get props => [id, email, name, picture, friends];
+  List<Object?> get props => [id, email, name, picture, friends , win,lose,];
 }
 
 class AppNotification  extends Equatable {
@@ -216,8 +230,10 @@ class Challenge {
   final int challengedScore;
   final DateTime createdAt;
   final String status;
+  final List<String> questionIDs;
 
   const Challenge(  {
+    required this.questionIDs,
     required this.icon,
     required this.challengerPlayed,
     required this.challengedPlayed,
@@ -235,6 +251,7 @@ class Challenge {
     final data = doc.data() as Map<String, dynamic>;
     final iconData = data['icon'] as Map<String, dynamic>;
     return Challenge(
+       questionIDs: List<String>.from(data['questionIDs'] ?? []),
       icon:  IconData(
       iconData['codePoint'],
       fontFamily: iconData['fontFamily'],

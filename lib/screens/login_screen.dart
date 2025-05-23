@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  // ignore: unused_field
   String? _errorMsg;
   bool signInRequired = false;
 

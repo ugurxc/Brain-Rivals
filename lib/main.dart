@@ -2,7 +2,8 @@ import 'package:brain_rivals/bloc_observer.dart';
 import 'package:brain_rivals/blocs/auth_bloc/auth_bloc.dart';
 import 'package:brain_rivals/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:brain_rivals/blocs/update_bloc/update_user_info_bloc.dart';
-import 'package:brain_rivals/constant.dart';
+import 'package:brain_rivals/keys.dart';
+
 import 'package:brain_rivals/screens/login_screen.dart';
 import 'package:brain_rivals/screens/mobile_layout.dart';
 import 'package:firebase_core/firebase_core.dart';

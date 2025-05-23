@@ -4,6 +4,7 @@ import 'package:brain_rivals/constant.dart';
 import 'package:brain_rivals/screens/login_screen.dart';
 import 'package:brain_rivals/screens/my_profile.dart';
 import 'package:brain_rivals/screens/offline_game/offline_category_screen.dart';
+import 'package:brain_rivals/screens/offline_game/profile_test1.dart';
 import 'package:brain_rivals/screens/online_game/online_game_invite_page.dart';
 import 'package:brain_rivals/screens/social_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -168,21 +169,21 @@ class _MobileLayoutState extends State<MobileLayout> {
             child: InkWell(
               onTap: () {
                 
-                showDialog(context: context, builder: (context) {
+                /* showDialog(context: context, builder: (context) {
                   return  MyProfile(userId: state.user!.id,);
-                },);
-                 Navigator.push(
+                },); */
+                  Navigator.push(
                  context,
                   MaterialPageRoute(builder: (context) {
-                    return  MyProfile(userId: state.user!.id,); // Profil seçme ekranına yönlendirme
+                    return  const ProfilePage(); // Profil seçme ekranına yönlendirme
                   }),
-                ); 
+                );  
               },
               child: CircleAvatar(
                       radius: 40,
                       backgroundImage: state.user?.picture != null
       ? AssetImage(state.user!.picture!)
-      : const AssetImage('assets/bilim.png') as ImageProvider,
+      : const AssetImage('assets/bilim.png') ,
                     )
             ),
           )

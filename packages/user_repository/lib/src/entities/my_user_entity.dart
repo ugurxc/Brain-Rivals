@@ -6,9 +6,13 @@ class MyUserEntity extends Equatable {
   final String email;
   final String name;
   final String? picture;
-  final List<String> friends; // Yeni alan
+  final List<String> friends;
+    final int win;
+  final int lose; // Yeni alan
 
   const MyUserEntity({
+        this.win = 0,
+    this.lose = 0,
     required this.id,
     required this.email,
     required this.name,
@@ -18,6 +22,8 @@ class MyUserEntity extends Equatable {
 
   Map<String, Object?> toDocument() {
     return {
+            'win': win,
+      'lose': lose,
       'id': id,
       'email': email,
       'name': name,
@@ -29,6 +35,8 @@ class MyUserEntity extends Equatable {
 
   static MyUserEntity fromDocument(Map<String, dynamic> doc) {
     return MyUserEntity(
+            win: (doc['win'] as int?) ?? 0,
+      lose: (doc['lose'] as int?) ?? 0,
       id: doc['id'] as String,
       email: doc['email'] as String,
       name: doc['name'] as String,
@@ -38,7 +46,7 @@ class MyUserEntity extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, email, name, picture, friends];
+  List<Object?> get props => [id, email, name, picture, friends , win,lose];
 }
 
 class NotificationEntity extends Equatable {

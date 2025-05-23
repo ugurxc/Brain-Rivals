@@ -137,6 +137,7 @@ class InviteFriendScreen extends StatelessWidget {
 
 
 import 'package:brain_rivals/screens/online_game/online_category_screen.dart';
+import 'package:brain_rivals/screens/other_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -244,11 +245,18 @@ class InviteFriendScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  child: CircleAvatar(
-                                    radius: 28,
-                                    backgroundImage: friend.picture?.isNotEmpty == true
-                                        ? AssetImage(friend.picture!)
-                                        : const AssetImage('assets/default_avatar.png') as ImageProvider,
+                                  child: InkWell(
+                                    onTap: () {
+                                       Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return OtherProfilePage(user: friend,);
+            },));
+                                    },
+                                    child: CircleAvatar(
+                                      radius: 28,
+                                      backgroundImage: friend.picture?.isNotEmpty == true
+                                          ? AssetImage(friend.picture!)
+                                          : const AssetImage('assets/default_avatar.png') as ImageProvider,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 12),

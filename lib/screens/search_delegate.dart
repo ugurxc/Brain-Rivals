@@ -81,6 +81,7 @@ class UserSearchDelegate extends SearchDelegate<MyUser> {
   }
 } */
 
+import 'package:brain_rivals/screens/other_profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:user_repository/user_repository.dart';
@@ -189,10 +190,17 @@ class UserSearchDelegate extends SearchDelegate<MyUser> {
               trailing: _buildFriendButton(user),
               title: Text(user.name),
               subtitle: Text(user.email),
-              leading: CircleAvatar(
-                backgroundImage: user.picture?.isNotEmpty == true
-                    ? AssetImage(user.picture!)
-                    : const NetworkImage('https://via.placeholder.com/150'),
+              leading: InkWell(
+                onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return OtherProfilePage(user: user,);
+            },));
+                },
+                child: CircleAvatar(
+                  backgroundImage: user.picture?.isNotEmpty == true
+                      ? AssetImage(user.picture!)
+                      : const NetworkImage('https://via.placeholder.com/150'),
+                ),
               ),
               onTap: () {
                 // Kullanıcı profil sayfasına git

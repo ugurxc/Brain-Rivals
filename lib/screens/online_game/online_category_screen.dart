@@ -1,5 +1,5 @@
 import 'package:brain_rivals/constant.dart';
-import 'package:brain_rivals/screens/offline_game/category_detail_screen.dart';
+
 import 'package:brain_rivals/screens/online_game/category_detail_screen_online.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

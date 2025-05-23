@@ -1,4 +1,5 @@
 import 'package:brain_rivals/screens/mesage_screen.dart';
+import 'package:brain_rivals/screens/other_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
@@ -108,10 +109,18 @@ class _FriendListItem extends StatelessWidget {
         }
       },
       child: ListTile(
-        leading: CircleAvatar(
-          backgroundImage: friend.picture?.isNotEmpty == true
-              ? AssetImage(friend.picture!)
-              : const AssetImage('assets/default_avatar.png') as ImageProvider,
+        leading: InkWell(
+
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return OtherProfilePage(user: friend,);
+            },));
+          },
+          child: CircleAvatar(
+            backgroundImage: friend.picture?.isNotEmpty == true
+                ? AssetImage(friend.picture!)
+                : const AssetImage('assets/default_avatar.png') as ImageProvider,
+          ),
         ),
         title: Text(friend.name),
         subtitle: Text(friend.email),

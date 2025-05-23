@@ -1,3 +1,4 @@
+import 'package:brain_rivals/screens/other_profile_screen.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
@@ -71,10 +72,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           duration: const Duration(milliseconds: 300),
           child: ListTile(
             key: ValueKey(notification.id),
-            leading: CircleAvatar(
-              backgroundImage: user.picture?.isNotEmpty == true
-                  ? AssetImage(user.picture!)
-                  : const AssetImage('assets/default_avatar.png') as ImageProvider,
+            leading: InkWell(
+              onTap: () {
+                 Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return OtherProfilePage(user: user,);
+            },));
+              },
+              child: CircleAvatar(
+                backgroundImage: user.picture?.isNotEmpty == true
+                    ? AssetImage(user.picture!)
+                    : const AssetImage('assets/default_avatar.png') as ImageProvider,
+              ),
             ),
             title: Text(user.name),
             subtitle: Column(

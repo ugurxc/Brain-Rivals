@@ -1,7 +1,8 @@
 import 'package:brain_rivals/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:brain_rivals/constant.dart';
 import 'package:brain_rivals/screens/ai_screens/ui.dart';
-import 'package:brain_rivals/screens/online_game/history_screen.dart';
+import 'package:brain_rivals/screens/mobile_layout.dart';
+
 
 import 'package:brain_rivals/widgets/soru_cevap_widget.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,10 @@ class _OfflineGameScreenState extends State<OfflineGameScreen> {
               ElevatedButton(
                  style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.green)),
                 onPressed: () {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => const MobileLayout()),
+  (Route<dynamic> route) => false,
+);
                 },
                 child: const Text("Evet"  , style: TextStyle(color: Colors.white)),
               ),

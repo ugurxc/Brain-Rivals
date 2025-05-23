@@ -1,13 +1,16 @@
 import 'package:brain_rivals/blocs/my_user_bloc/my_user_bloc.dart';
 import 'package:brain_rivals/constant.dart';
 import 'package:brain_rivals/screens/ai_screens/ui.dart';
+import 'package:brain_rivals/screens/mobile_layout.dart';
 
-import 'package:brain_rivals/widgets/soru_cevap_widget.dart';
+
 import 'package:brain_rivals/widgets/soru_cevap_widget_online.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 import 'package:user_repository/user_repository.dart';
 
 class OnlineGameScreen extends StatefulWidget {
@@ -27,7 +30,34 @@ class _OfflineGameScreenState extends State<OnlineGameScreen> {
 
 
  late final FirebaseUserRepository userRepo;
+Future<void> _handleChallengeCompletion(String challengeID) async {
+try {
+    final challengeDoc = await FirebaseFirestore.instance
+        .collection('challenges')
+        .doc(challengeID)
+        .get();
 
+    final data = challengeDoc.data()!;
+    final challengerScore = data['challengerScore'] as int;
+    final challengedScore = data['challengedScore'] as int;
+
+    if (challengerScore == challengedScore) return;
+
+    final winnerID = challengerScore > challengedScore 
+        ? data['challengerID'] 
+        : data['challengedID'];
+    final loserID = winnerID == data['challengerID'] 
+        ? data['challengedID'] 
+        : data['challengerID'];
+
+    // İstatistikleri transaction dışında güncelle
+    await Provider.of<UserRepository>(context, listen: false)
+        .updateUserStats(winnerID, loserID);
+  } catch (e) {
+    print("Hata: $e");
+  }
+  
+}
   @override
   void initState() {
     super.initState();
@@ -67,14 +97,33 @@ bool _hasNavigatedToYapayZeka = false;
               ),
               ElevatedButton(
                  style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.green)),
-                onPressed: () {
+                onPressed: () async {
                       // Skoru sıfırla ve çık
-              userRepo.updateChallengeScore(
+            await  userRepo.updateChallengeScore(
                 widget.challengeID,
                 widget.isChallenger,
                 0
               );
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+               if (!widget.isChallenger){
+    await  _handleChallengeCompletion( widget.challengeID);
+
+   }
+    if (!widget.isChallenger) {
+     
+  try {
+    await userRepo.completeChallenge(widget.challengeID);
+    // Güncelleme başarılıysa burası çalışır
+    // Sonraki işlemleriniz burada olabilir
+  } catch (e) {
+    // Hata yönetimi
+  }
+}
+
+ 
+                  Navigator.of(context).pushAndRemoveUntil(
+  MaterialPageRoute(builder: (context) => const MobileLayout()),
+  (Route<dynamic> route) => false,
+);
                 },
                 child: const Text("Evet"  , style: TextStyle(color: Colors.white)),
               ),
